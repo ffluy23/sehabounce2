@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+@font-face {
+    font-family: 'OngleipParkDahyeon';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/Ownglyph_ParkDaHyun.woff2') format('woff2');
+    font-weight: normal;
+    font-display: swap;
+}
+
+*{
+  -webkit-tap-highlight-color: transparent;}
+
+body {
+    margin: 0;
+    padding: 20px;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.image-wrapper {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+	touch-action: manipulation;
+}
+
+.image-wrapper img {
+    width: 80vw;
+    max-width: 420px;
+    height: auto;
+    border-radius: 16px;
+    display: block;
+}
+
+/* 말풍선 */
+.click-bubble {
+    position: absolute;
+    bottom: 105%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 12px 18px;
+    border-radius: 20px;
+    font-family: 'OngleipParkDahyeon', sans-serif;
+    font-size: clamp(14px, 4vw, 20px);
+    max-width: 95vw;
+    text-align: center;
+    white-space: normal;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+/* 말풍선 꼬리 */
+.click-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px 8px 0 8px;
+    border-style: solid;
+    border-color: white transparent transparent transparent;
+}
+
+/* 캐릭터 애니메이션 */
+.pop-character {
+    animation: bubblePop 0.25s ease-out;
+}
+
+@keyframes bubblePop {
+    0%   { transform: scale(1); }
+    30%  { transform: scale(0.92); }
+    70%  { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pop-bubble {
+    animation: bubblePopBubble 0.25s ease-out;
+}
+
+@keyframes bubblePopBubble {
+    0%   { transform: translateX(-50%) scale(1); }
+    30%  { transform: translateX(-50%) scale(0.92); }
+    70%  { transform: translateX(-50%) scale(1.05); }
+    100% { transform: translateX(-50%) scale(1); }
+}
+
+.show {
+    opacity: 1;
+}
+</style>
+</head>
+<body>
+
+<div class="image-wrapper" id="character">
+    <img src=https://i.ibb.co/GfZxwD56/IMG-2068.webp" alt="IMG 2068 width="300">
+    <div class="click-bubble" id="bubble"></div>
+</div>
+
+<script>
+const messages = [
+"「Time Out」 유진, 도착했어~",
+
+"댕― 댕―, 시간 됐어.",
+
+"프란~츠.",
+
+"무슨 일이야?",
+
+"내가 필요해?",
+
+"아하하, 간지러워.",
+
+"프란츠, 나 슬슬 배고픈데.",
+
+"오늘도 아름답네, 프란츠.",
+
+"사랑해, 하늘이 무너져도 변치 않아.",
+
+"어쩌면… 우리가 잊고 있는 마법사들이 많을지도 몰라.",
+
+"결국 언젠가 우리는 소멸하고 서로를 잊게 되겠지. 그건 싫은걸.",
+
+"나 말고 다른 남자는 보지 말아줘. 질투난다구.",
+
+"나처럼 잘생긴 남자가 또 어디에 있다고.",
+
+"문호에 있었던 시절은… … 음, 기억이 안 나네.",
+
+"시청 공무원이라는 건 지루하고, 따분했어.",
+
+"내 적성은 한량인 것 같아. 일 안 하는 게 너무 재밌네.",
+
+"마화를 좀 더 얻을 수는 없으려나.",
+
+"아, 좀… 빈곤한데.",
+
+"째깍째깍, 시간이 간다. 날카로운 시간이 간다.",
+
+"타임 아웃, 늦장 좀 부리자. 기다려, 기다려~",
+
+"좋은 게 좋은 거지.",
+
+"꽃으로도 때리지 말라, 그런 말은 대체 누가 했대? 봐, 아름답잖아.",
+
+"마소에서 마소가 태어난다. 최고잖아. 돌고 도는 윤회전생.",
+
+"으엑, 이거 채소잖아.",
+
+"내가 발생한 이경을 보여줄 수 있다면 좋을 텐데.",
+
+"문 하나만 있는 이경, 알고 있어?",
+
+"꽃을 피워줄게. 짜쟌."
+];
+
+const wrapper = document.getElementById("character");
+const bubble = document.getElementById("bubble");
+
+let hideTimer;
+let lastIndex = -1;
+
+wrapper.addEventListener("click", () => {
+
+    let randomIndex;
+
+    do {
+        randomIndex = Math.floor(Math.random() * messages.length);
+    } while (randomIndex === lastIndex);
+
+    lastIndex = randomIndex;
+    bubble.textContent = messages[randomIndex];
+
+    wrapper.classList.remove("pop-character");
+    bubble.classList.remove("pop-bubble");
+    void wrapper.offsetWidth;
+
+    wrapper.classList.add("pop-character");
+    bubble.classList.add("pop-bubble");
+
+    bubble.classList.add("show");
+
+    clearTimeout(hideTimer);
+
+    hideTimer = setTimeout(() => {
+        bubble.classList.remove("show");
+    }, 5000);
+});
+</script>
+
+</body>
+</html>
